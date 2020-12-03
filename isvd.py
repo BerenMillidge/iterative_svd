@@ -21,16 +21,17 @@ N_iters = 1000
 U, _ = LA.qr(U)
 V,_ = LA.qr(V)
 #print(U.T @ U) # check it is orthogonal
+# compute S using Eq 8
 S = U.T @ Y @ V
 penalization_param = 0.001
 # begin loop
 for i in range(N_iters):
-  U += lr * (((Y @ V) + (U @ V.T @ Y.T @ U)) @ S)
-  V += lr * (((Y.T @ U) + (V @ U.T @ Y @ V)) @ S)
+  U += lr * (((Y @ V) + (U @ V.T @ Y.T @ U)) @ S) # Eq 6
+  V += lr * (((Y.T @ U) + (V @ U.T @ Y @ V)) @ S) # Eq 7
   #U = U * np.sign(S)
   S = U.T @ Y @ V 
-  S = np.abs(S)
-  Y += lr * ((U @ S @ V.T )- Y + (penalization_param * (X - Y)))
+  S = np.abs(S) # make positive
+  Y += lr * ((U @ S @ V.T )- Y + (penalization_param * (X - Y))) # Eq 10
   #U, _ = LA.qr(U)
   #V,_ = LA.qr(V)
   if np.isnan(U).any():
