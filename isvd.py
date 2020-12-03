@@ -22,7 +22,7 @@ U, _ = LA.qr(U)
 V,_ = LA.qr(V)
 #print(U.T @ U) # check it is orthogonal
 S = U.T @ Y @ V
-penalization_param = 0.0
+penalization_param = 0.001
 # begin loop
 for i in range(N_iters):
   U += lr * (((Y @ V) + (U @ V.T @ Y.T @ U)) @ S)
@@ -30,7 +30,7 @@ for i in range(N_iters):
   #U = U * np.sign(S)
   S = U.T @ Y @ V 
   S = np.abs(S)
-  Y += lr * ((U @ S @ V.T )- Y) #- (penalization_param * (X - Y)))
+  Y += lr * ((U @ S @ V.T )- Y + (penalization_param * (X - Y)))
   #U, _ = LA.qr(U)
   #V,_ = LA.qr(V)
   if np.isnan(U).any():
